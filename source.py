@@ -53,7 +53,36 @@ def clean_twitter_mobility_data():
     filtered_case_data_1 = add_week_year(mobility_data)
     return filtered_case_data_1
 
+def merge_and_clean_data(case_data, mobility_data):
+    # master_data_initial will be used in the future when we are working with state/city data.
+    master_data_initial = pd.merge(case_data, mobility_data, on = ["year", "week"], how = "left")
+    
+    locations_to_drop = [
+        "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID", "IL", "IN", "KS", "KY", 
+        "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", 
+        "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY", 
+        "Northeast", "Midwest", "Central", "South", "West", "Caribbean", 
+        "Albuquerque", "Anaheim", "Anchorage", "Arlington", "Atlanta", "Aurora", "Austin", "Bakersfield", 
+        "Baltimore", "Baton Rouge", "Boise", "Boston", "Buffalo", "Chandler", "Charlotte", "Chesapeake", 
+        "Chicago", "Chula Vista", "Cincinnati", "Cleveland", "Colorado Springs", "Columbus", "Corpus Christi", 
+        "Dallas", "Denver", "Detroit", "Durham", "El Paso", "Fort Wayne", "Fort Worth", "Fremont", "Fresno", 
+        "Garland", "Gilbert", "Glendale", "Greensboro", "Henderson", "Hialeah", "Honolulu", "Houston", 
+        "Indianapolis", "Irvine", "Irving", "Jacksonville", "Jersey City", "Kansas City", "Laredo", 
+        "Las Vegas", "Lexington", "Lincoln", "Long Beach", "Los Angeles", "Louisville", "Lubbock", "Madison", 
+        "Memphis", "Mesa", "Miami", "Milwaukee", "Minneapolis", "Nashville", "New York City", "New Orleans", 
+        "Newark", "Norfolk", "North Las Vegas", "Oakland", "Oklahoma City", "Omaha", "Orlando", "Philadelphia", 
+        "Phoenix", "Pittsburgh", "Plano", "Portland", "Raleigh", "Reno", "Richmond", "Riverside", "Sacramento", 
+        "San Antonio", "San Diego", "San Francisco", "San Jose", "Santa Ana", "Scottsdale", "Seattle", "Spokane", 
+        "St Louis", "St Paul", "St Petersburg", "Stockton", "Tampa", "Toledo", "Tucson", "Tulsa", "Virginia Beach", 
+        "Washington", "Wichita", "Winston-Salem"
+    ]
+
+    master_data = master_data_initial.drop(locations_to_drop, axis=1)
+    return master_data
+
 if __name__ == "__main__":
     case_data = clean_case_data()
     mobility_data = clean_twitter_mobility_data()
-    print(case_data)
+    master_data = merge_and_clean_data(case_data, mobility_data)
+    master_data.to_csv('pseudo_data.csv', index=False)
+    print(master_data)
