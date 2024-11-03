@@ -1,8 +1,6 @@
 from source import compile_data
 import matplotlib.pyplot as plt
-from statsmodels.tsa.arima.model import ARIMA
 import pandas as pd
-from sklearn.metrics import mean_absolute_error
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 def clean_data():
@@ -75,7 +73,7 @@ def plot_seasonal_ARIMA(test_data, speculation):
 def run_Seasonal_ARIMA_model(data):
     data = set_index_on_date(data)
 
-    training_data_len = int(0.85 * len(data))
+    training_data_len = int(0.7 * len(data))
     data["mobility_data"].interpolate(method="linear", inplace=True)
 
     training_data = data[:training_data_len].astype(float)
