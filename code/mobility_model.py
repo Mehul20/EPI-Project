@@ -52,35 +52,38 @@ def graph_plots(data):
     plot_data(data, "new_cases")
     plot_data(data, "new_deaths")
 
-def run_ARIMA_model(data):
+def set_index_on_date(data):
     data["date"] = pd.to_datetime(data["date"])
     data.set_index('date', inplace=True)
-    data = data.asfreq('W') 
+    data = data.asfreq('W')
+    return data
 
+def plot_seasonal_ARIMA(test_data, speculation):
+    plt.figure(figsize=(12, 6))
+    plt.plot(test_data.index, test_data["new_cases"], label="Ground Truth Data", color = "green")
+    plt.xlabel("Week and Year")
+    plt.plot(test_data.index, speculation, label="Seasonal ARIMA Prediction", color="red")
+    plt.ylabel("New Covid - 19 Cases")
+    plt.title("Speculation vs Ground Truth with Seasonal ARIMA Model")
+    plt.legend()
+    plt.savefig("../plots/SARIMA/image.png", format = "png")
+    plt.show()
+
+def run_Seasonal_ARIMA_model(data):
+    data = set_index_on_date(data)
+
+    training_data_len = int(0.85 * len(data))
     data["mobility_data"].interpolate(method="linear", inplace=True)
 
-    total_rows = len(data)
-    training_data_len = int(0.8 * total_rows)
+    training_data = data[:training_data_len].astype(float)
+    test_data = data[training_data_len:].astype(float)
 
-    training_data = data[: training_data_len].copy()
-    training_data = training_data.astype(float)
-    test_data = data[training_data_len : ].copy()
-    test_data = test_data.astype(float)
-
-    arima_model = SARIMAX(
-        training_data["new_cases"],
-        exog=training_data["mobility_data"],
-        order=(1, 1, 1),
-        seasonal_order=(1, 1, 1, 52)
-    )
-
-    model_fitted = arima_model.fit()
-    speculation = model_fitted.forecast(steps = len(test_data), exog=test_data["mobility_data"])
-
-    mae = mean_absolute_error(test_data["new_cases"], speculation)
-    print(mae)
+    seasonal_arima_model = SARIMAX(training_data["new_cases"], exog=training_data["mobility_data"], order=(1, 1, 1), seasonal_order=(1, 1, 1, 52))
+    fit_model = seasonal_arima_model.fit()
+    speculation = fit_model.forecast(steps = len(test_data), exog=test_data["mobility_data"])
+    plot_seasonal_ARIMA(test_data, speculation)
 
 if __name__ == "__main__":
     data = clean_data()
-    run_ARIMA_model(data)
+    run_Seasonal_ARIMA_model(data)
     #graph_plots(data)
