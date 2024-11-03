@@ -60,10 +60,13 @@ def set_index_on_date(data):
 
 def plot_seasonal_ARIMA(test_data, speculation):
     plt.figure(figsize=(12, 6))
+    
     plt.plot(test_data.index, test_data["new_cases"], label="Ground Truth Data", color = "green")
     plt.xlabel("Week and Year")
+    
     plt.plot(test_data.index, speculation, label="Seasonal ARIMA Prediction", color="red")
     plt.ylabel("New Covid - 19 Cases")
+    
     plt.title("Speculation vs Ground Truth with Seasonal ARIMA Model")
     plt.legend()
     plt.savefig("../plots/SARIMA/image.png", format = "png")
@@ -80,6 +83,7 @@ def run_Seasonal_ARIMA_model(data):
 
     seasonal_arima_model = SARIMAX(training_data["new_cases"], exog=training_data["mobility_data"], order=(1, 1, 1), seasonal_order=(1, 1, 1, 52))
     fit_model = seasonal_arima_model.fit()
+
     speculation = fit_model.forecast(steps = len(test_data), exog=test_data["mobility_data"])
     plot_seasonal_ARIMA(test_data, speculation)
 
