@@ -49,7 +49,9 @@ def clean_case_data():
 def clean_twitter_mobility_data():
     filePath = "mobility.csv"
     mobility_data = read_data(filePath)
-    return mobility_data
+    mobility_data = mobility_data.rename(columns={'Dates': 'date'})
+    filtered_case_data_1 = add_week_year(mobility_data)
+    return filtered_case_data_1
 
 if __name__ == "__main__":
     case_data = clean_case_data()
