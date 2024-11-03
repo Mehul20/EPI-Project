@@ -11,6 +11,7 @@ def clean_data():
         'avg_USA': 'first'
     })
     shrink_data = shrink_data.rename(columns={'avg_USA': 'mobility_data'})
+    shrink_data = shrink_data.dropna(subset=["mobility_data"])
     shrink_data.to_csv('../data/weekly_cleaned_data.csv', index=False)
     return shrink_data
 
