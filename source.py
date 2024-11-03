@@ -27,12 +27,24 @@ def remove_columns(data):
     data = data.drop(columns_to_drop, axis=1)
     return data
 
+def add_week_year(data):
+    data['date'] = pd.to_datetime(data['date'])
+    data['year'] = data['date'].dt.year
+    data['week'] = data['date'].dt.isocalendar().week
+    return data
+
+def remove_years_2023_2024(data):
+    filtered_data = data[~data['year'].isin([2023, 2024])]
+    return filtered_data
+
 def clean_case_data():
     filePath = "cowid-covid-data.csv"
     case_data = read_data(filePath)
     US_data = get_USA_data(case_data)
-    filtered_case_data = remove_columns(US_data)
-    return filtered_case_data
+    filtered_case_data_1 = remove_columns(US_data)
+    filtered_case_data_2 = add_week_year(filtered_case_data_1)
+    filtered_case_data_3 = remove_years_2023_2024(filtered_case_data_2)
+    return filtered_case_data_3
 
 def clean_twitter_mobility_data():
     filePath = "mobility.csv"
@@ -42,3 +54,4 @@ def clean_twitter_mobility_data():
 if __name__ == "__main__":
     case_data = clean_case_data()
     mobility_data = clean_twitter_mobility_data()
+    print(case_data)
