@@ -1,6 +1,9 @@
 from source import compile_data
 import matplotlib.pyplot as plt
+from statsmodels.tsa.arima.model import ARIMA
 import pandas as pd
+from sklearn.metrics import mean_absolute_error
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 def clean_data():
     data = compile_data()
@@ -12,7 +15,7 @@ def clean_data():
         'year': 'first',
         'week': 'first',
         'avg_USA': 'first',
-        'date' : 'last'
+        'date': 'last'
     })
     shrink_data = shrink_data.rename(columns={'avg_USA': 'mobility_data'})
     shrink_data = shrink_data.dropna(subset=["mobility_data"])
@@ -50,7 +53,32 @@ def graph_plots(data):
     plot_data(data, "new_deaths")
 
 def run_ARIMA_model(data):
-    print(data.head())
+    data["date"] = pd.to_datetime(data["date"])
+    data.set_index('date', inplace=True)
+    data = data.asfreq('W') 
+
+    data["mobility_data"].interpolate(method="linear", inplace=True)
+
+    total_rows = len(data)
+    training_data_len = int(0.8 * total_rows)
+
+    training_data = data[: training_data_len].copy()
+    training_data = training_data.astype(float)
+    test_data = data[training_data_len : ].copy()
+    test_data = test_data.astype(float)
+
+    arima_model = SARIMAX(
+        training_data["new_cases"],
+        exog=training_data["mobility_data"],
+        order=(1, 1, 1),
+        seasonal_order=(1, 1, 1, 52)
+    )
+
+    model_fitted = arima_model.fit()
+    speculation = model_fitted.forecast(steps = len(test_data), exog=test_data["mobility_data"])
+
+    mae = mean_absolute_error(test_data["new_cases"], speculation)
+    print(mae)
 
 if __name__ == "__main__":
     data = clean_data()
