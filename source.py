@@ -12,9 +12,18 @@ def remove_columns(data):
     data = data.drop(columns_to_drop, axis=1)
     return data
 
-if __name__ == "__main__":
+def clean_case_data():
     filePath = "cowid-covid-data.csv"
-    data = read_data(filePath)
-    US_data = get_USA_data(data)
-    filtered_data = remove_columns(US_data)
-    print(filtered_data)
+    case_data = read_data(filePath)
+    US_data = get_USA_data(case_data)
+    filtered_case_data = remove_columns(US_data)
+    return filtered_case_data
+
+def clean_twitter_mobility_data():
+    filePath = "mobility.csv"
+    mobility_data = read_data(filePath)
+    return mobility_data
+
+if __name__ == "__main__":
+    case_data = clean_case_data()
+    mobility_data = clean_twitter_mobility_data()
