@@ -1,15 +1,18 @@
 from source import compile_data
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def clean_data():
     data = compile_data()
+    data = data.sort_values(by='date')
     shrink_data = data.groupby(["year", "week"]).agg({
         'new_cases' : 'sum',
         'new_deaths' : 'sum',
         'new_vaccinations': 'sum',
         'year': 'first',
         'week': 'first',
-        'avg_USA': 'first'
+        'avg_USA': 'first',
+        'date' : 'last'
     })
     shrink_data = shrink_data.rename(columns={'avg_USA': 'mobility_data'})
     shrink_data = shrink_data.dropna(subset=["mobility_data"])
@@ -46,6 +49,10 @@ def graph_plots(data):
     plot_data(data, "new_cases")
     plot_data(data, "new_deaths")
 
+def run_ARIMA_model(data):
+    print(data.head())
+
 if __name__ == "__main__":
     data = clean_data()
-    graph_plots(data)
+    run_ARIMA_model(data)
+    #graph_plots(data)
