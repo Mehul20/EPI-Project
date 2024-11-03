@@ -17,7 +17,7 @@ def remove_columns(data):
                        'new_people_vaccinated_smoothed','new_people_vaccinated_smoothed_per_hundred','aged_65_older','aged_70_older',
                        'hospital_beds_per_thousand', 'excess_mortality_cumulative_absolute','excess_mortality_cumulative_per_million']
 
-    # Columns not removed from dataframe!
+    # Columns not removed from dataframe
     # ---------------------------------------------------------------------------------------------------------------------------------------------------
     # date,total_cases,new_cases,total_deaths,new_deaths,reproduction_rate,icu_patients,hosp_patients,weekly_icu_admissions,weekly_hosp_admissions,
     # total_tests,new_tests,positive_rate,tests_per_case,tests_units,total_vaccinations,people_vaccinated,people_fully_vaccinated,total_boosters,
