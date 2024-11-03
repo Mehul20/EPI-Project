@@ -80,9 +80,12 @@ def merge_and_clean_data(case_data, mobility_data):
     master_data = master_data_initial.drop(locations_to_drop, axis=1)
     return master_data
 
-if __name__ == "__main__":
+def compile_data():
     case_data = clean_case_data()
     mobility_data = clean_twitter_mobility_data()
     master_data = merge_and_clean_data(case_data, mobility_data)
     master_data.to_csv('../data/master_data.csv', index=False)
-    print(master_data)
+    return master_data
+
+if __name__ == "__main__":
+    compile_data()
