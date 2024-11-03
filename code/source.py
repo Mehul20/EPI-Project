@@ -78,6 +78,7 @@ def merge_and_clean_data(case_data, mobility_data):
     ]
 
     master_data = master_data_initial.drop(locations_to_drop, axis=1)
+    master_data = master_data.rename(columns={'date_x': 'date'})
     return master_data
 
 def compile_data():
