@@ -38,7 +38,7 @@ def remove_years_2023_2024(data):
     return filtered_data
 
 def clean_case_data():
-    filePath = "cowid-covid-data.csv"
+    filePath = "../data/cowid-covid-data.csv"
     case_data = read_data(filePath)
     US_data = get_USA_data(case_data)
     filtered_case_data_1 = remove_columns(US_data)
@@ -47,7 +47,7 @@ def clean_case_data():
     return filtered_case_data_3
 
 def clean_twitter_mobility_data():
-    filePath = "mobility.csv"
+    filePath = "../data/mobility.csv"
     mobility_data = read_data(filePath)
     mobility_data = mobility_data.rename(columns={'Dates': 'date'})
     filtered_case_data_1 = add_week_year(mobility_data)
@@ -74,7 +74,7 @@ def merge_and_clean_data(case_data, mobility_data):
         "Phoenix", "Pittsburgh", "Plano", "Portland", "Raleigh", "Reno", "Richmond", "Riverside", "Sacramento", 
         "San Antonio", "San Diego", "San Francisco", "San Jose", "Santa Ana", "Scottsdale", "Seattle", "Spokane", 
         "St Louis", "St Paul", "St Petersburg", "Stockton", "Tampa", "Toledo", "Tucson", "Tulsa", "Virginia Beach", 
-        "Washington", "Wichita", "Winston-Salem"
+        "Washington", "Wichita", "Winston-Salem", "date_y"
     ]
 
     master_data = master_data_initial.drop(locations_to_drop, axis=1)
@@ -84,5 +84,5 @@ if __name__ == "__main__":
     case_data = clean_case_data()
     mobility_data = clean_twitter_mobility_data()
     master_data = merge_and_clean_data(case_data, mobility_data)
-    master_data.to_csv('pseudo_data.csv', index=False)
+    master_data.to_csv('../data/master_data.csv', index=False)
     print(master_data)
