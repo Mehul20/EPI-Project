@@ -39,7 +39,7 @@ def plot_data(data, parameter):
 
         axis_left.plot(current_year_data["week"], current_year_data["mobility_data"], label="Mobility Data", color = "green")
         axis_left.set_ylabel("Mobility Data", color = "green")
-        axis_left.set_title("Weekly Mobility and " + str(print_parameter) + "data for " + str(year))
+        axis_left.set_title("Weekly Mobility and " + str(print_parameter) + " data for " + str(year))
 
         axis_right = axis_left.twinx()
         axis_right.plot(current_year_data['week'], current_year_data[parameter], label=print_parameter, color = "red")
