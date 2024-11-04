@@ -14,7 +14,8 @@ def clean_data():
         'year': 'first',
         'week': 'first',
         'avg_USA': 'first',
-        'date': 'last'
+        'date': 'last',
+        'stringency_index': 'last'
     })
 
     shrink_data = shrink_data.rename(columns={'avg_USA': 'mobility_data'})
@@ -63,13 +64,14 @@ def plot_seasonal_ARIMA(test_data, speculation):
     plt.figure(figsize=(12, 6))
     
     plt.plot(test_data.index, test_data["new_cases"], label="Ground Truth Data", color = "green")
-    plt.xlabel("Week and Year")
+    plt.xlabel("Month and Year")
     
     plt.plot(test_data.index, speculation, label="Seasonal ARIMA Prediction", color="red")
     plt.ylabel("New Covid - 19 Cases")
     
     plt.title("Speculation vs Ground Truth with Seasonal ARIMA Model")
     plt.legend()
+    plt.grid()
     plt.savefig("../plots/SARIMA/image.png", format = "png")
     plt.show()
 
