@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def clean_data_for_prophet(data):
-    data = data[["date", "new_cases", "mobility_data", "new_vaccinations", "stringency_index"]]
+    data = data[["date", "new_cases", "mobility_data", "people_fully_vaccinated", "stringency_index"]]
     data = data.rename(columns={"date": "ds", "new_cases": "y"})
     data = data.dropna()
     return data
@@ -36,7 +36,7 @@ def run_meta_prophet_model(data):
     # We can also take into account the mobility_data.
     # meta_prophet_model.add_regressor("mobility_data", standardize = True)
 
-    meta_prophet_model.add_regressor("new_vaccinations", standardize = True)
+    meta_prophet_model.add_regressor("people_fully_vaccinated", standardize = True)
     meta_prophet_model.add_regressor("stringency_index", standardize = True)
 
     meta_prophet_model.fit(training_data)

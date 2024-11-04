@@ -15,7 +15,8 @@ def clean_data():
         'week': 'first',
         'avg_USA': 'first',
         'date': 'last',
-        'stringency_index': 'last'
+        'stringency_index': 'last',
+        'people_fully_vaccinated': 'last'
     })
 
     shrink_data = shrink_data.rename(columns={'avg_USA': 'mobility_data'})
