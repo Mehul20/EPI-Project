@@ -39,7 +39,7 @@ def SI_plot(col, SI_data, save_path):
     unique_years = SI_data['year'].unique()
     for year in unique_years:
         data_year = SI_data[SI_data['year'] == year]
-        weekly_avg_data = data_year.groupby(['year', 'week']).agg({col: 'mean'}).reset_index()
+        weekly_avg_data = data_year.groupby(['year', 'week']).agg({col: 'mean', 'V':'mean', 'mobility_index':'mean'}).reset_index()
         weekly_avg_data['year_week'] = weekly_avg_data['year'].astype(str) + ' - W' + weekly_avg_data['week'].astype(str)
         plt.figure(figsize=(12, 6))
         plt.xlabel('Year-Week')
@@ -53,15 +53,21 @@ def SI_plot(col, SI_data, save_path):
             path = save_path + f'S_plot_{year}.png'
         elif col == 'I':
             plt.plot(weekly_avg_data['year_week'], weekly_avg_data[col], label='Susceptible (I)', color='r', marker='.', linestyle='--')
-            plt.title(f'Infected Population Proportion (I) over Year-Week for {year}')
+            plt.title(f'Infected Population Proportion (I) over Year-Week for {year} & Vaccinated Population Proportion (V)')
+            for i, (y, v) in enumerate(zip(weekly_avg_data[col], weekly_avg_data['V'])):
+                if i % 4 == 0:
+                    plt.text(i, y, f'V = {v:.2f}', ha='left', va='bottom', fontsize=10, color='blue')
             path = save_path + f'I_plot_{year}.png'
         plt.savefig(path)
         plt.show()
 
 if __name__ == "__main__":
+    plot = False
     data = compile_data()
     params = model_params()
     SI_data = extract_SI_data(data, params)
     save_path = '../plots/SI_model/'
-    for col in ['S', 'I']:
-        SI_plot(col, SI_data, save_path)
+    if plot:
+        for col in ['S', 'I']:
+            SI_plot(col, SI_data, save_path)
+    print(SI_data[['N','S','I','V','I_daily','D_daily','R_0','mobility_index']].describe())
