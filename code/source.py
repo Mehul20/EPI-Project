@@ -22,7 +22,7 @@ def remove_columns(data):
     # date,total_cases,new_cases,total_deaths,new_deaths,reproduction_rate,icu_patients,hosp_patients,weekly_icu_admissions,weekly_hosp_admissions,
     # total_tests,new_tests,positive_rate,tests_per_case,tests_units,total_vaccinations,people_vaccinated,people_fully_vaccinated,total_boosters,
     # new_vaccinations,stringency_index,population_density,median_age,gdp_per_capita,extreme_poverty,cardiovasc_death_rate,diabetes_prevalence,
-    # female_smokers,male_smokers,handwashing_facilities,life_expectancy,human_development_index,population,excess_mortality_cumulative,excess_mortality,
+    # female_smokers,male_smokers,handwashing_facilities,life_expectancy,human_development_index,population,excess_mortality_cumulative,excess_mortality
     # ---------------------------------------------------------------------------------------------------------------------------------------------------
     data = data.drop(columns_to_drop, axis=1)
     return data
