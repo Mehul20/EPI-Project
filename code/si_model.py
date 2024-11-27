@@ -2,12 +2,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from source import compile_data
 
-def extract_SI_data(data, params):
-    num_days = params['R_time']
+def extract_columns(data):
     columns_to_extract = ['date','week','year','population','total_cases','new_cases','total_deaths','new_deaths','people_fully_vaccinated',
                           'reproduction_rate','avg_USA']
     SI_data = data[columns_to_extract]
+    return SI_data
 
+def extract_SI_data(data, params):
+    num_days = params['R_time']
+    SI_data = extract_columns(data)
     # first_vaccination_idx = SI_data[SI_data['people_fully_vaccinated'].notna()].index[0]
     # date_of_first_vaccination = SI_data.loc[first_vaccination_idx, 'date'].date()
     # print(f'First day with vaccination data: {date_of_first_vaccination}')
@@ -70,4 +73,4 @@ if __name__ == "__main__":
     if plot:
         for col in ['S', 'I']:
             SI_plot(col, SI_data, save_path)
-    print(SI_data[['N','S','I','V','I_daily','D_daily','R_0','mobility_index']].describe())
+    print(SI_data[['N','S','I','V','I_daily','D_daily','R_0','mobility_index']].head())

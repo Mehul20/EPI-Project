@@ -76,14 +76,21 @@ def plot_seasonal_ARIMA(test_data, speculation):
     plt.savefig("../plots/SARIMA/image.png", format = "png")
     plt.show()
 
-def run_Seasonal_ARIMA_model(data):
-    data = set_index_on_date(data)
-
-    training_data_len = int(0.7 * len(data))
+def mobility_interpolation(data):
     data["mobility_data"].interpolate(method="linear", inplace=True)
+    return data
 
+def train_test_split(data, train_proportion):
+    training_data_len = int(train_proportion * len(data))
     training_data = data[:training_data_len].astype(float)
     test_data = data[training_data_len:].astype(float)
+    return training_data, test_data
+
+def run_Seasonal_ARIMA_model(data):
+    indexed_data = set_index_on_date(data)
+    interpolated_data = mobility_interpolation(indexed_data)
+    train_proportion = 0.7
+    training_data, test_data = train_test_split(interpolated_data, train_proportion)
 
     seasonal_arima_model = SARIMAX(training_data["new_cases"], exog=training_data["mobility_data"], order=(1, 1, 1), seasonal_order=(1, 1, 1, 52))
     fit_model = seasonal_arima_model.fit()
