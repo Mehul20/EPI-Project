@@ -1,9 +1,9 @@
 import os
 import matplotlib.pyplot as plt
 from scalecast.Forecaster import Forecaster
-from LSTM_setup import get_data
+from data_setup import get_data
 from scalecast.util import find_optimal_transformation, gen_rnn_grid
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping # type: ignore
 import pandas as pd
 
 def create_forecaster(data, num_days_pred):
@@ -21,14 +21,14 @@ def create_forecaster(data, num_days_pred):
     return f, f_d, f_v, f_m
 
 def get_transformer_reverter(f):
-    transformer, reverter = find_optimal_transformation(f, set_aside_test_set=False, return_train_only=False, verbose=True,\
+    transformer, reverter = find_optimal_transformation(f, set_aside_test_set=False, return_train_only=True, verbose=True,\
                                                         detrend_kwargs=[{'loess':True},{'poly_order':1},{'ln_trend':True}],\
                                                         m=365, test_length=10)
     return transformer, reverter
 
 def get_rnn_grid():
     rnn_grid = gen_rnn_grid(layer_tries=10, min_layer_size=3, max_layer_size=5, units_pool=[100], epochs=[100], dropout_pool=[0, 0.05],\
-                            validation_split =0.2, callbacks=EarlyStopping(monitor='val_loss', patience=3), random_seed=20)
+                            validation_split=0.2, callbacks=EarlyStopping(monitor='val_loss', patience=3), random_seed=20)
     return rnn_grid
 
 def forecaster(f, f_d, f_v, f_m):
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     forecaster(f, f_d, f_v, f_m)
     print("\n\n\n\n\n")
     f = reverter.fit_transform(f)
-    f.plot_test_set(order_by='TestSetRMSE')
+    # f.plot_test_set(order_by='TestSetRMSE')
     # plt.savefig('LSTM MV test results.png')
     plt.show()
     pd.options.display.float_format = '{:,.4f}'.format
