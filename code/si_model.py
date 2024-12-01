@@ -2,6 +2,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from source import compile_data
 
+def extract_columns(data):
+    columns_to_extract = ['date','week','year','population','total_cases','new_cases','total_deaths','new_deaths','people_fully_vaccinated',
+                          'reproduction_rate','avg_USA']
+    SI_data = data[columns_to_extract]
+    return SI_data
+
 def extract_SI_data(data, params):
     num_days = params['R_time']
     columns_to_extract = ['date','week','year','population','total_cases','new_cases','total_deaths','new_deaths','people_fully_vaccinated',
