@@ -1,10 +1,11 @@
 from mobility_model import clean_data
 from prophet import Prophet
 import matplotlib.pyplot as plt
+from sklearn.metrics import root_mean_squared_error
 import pandas as pd
 
 def clean_data_for_prophet(data):
-    data = data[["date", "new_cases", "mobility_data", "people_fully_vaccinated", "stringency_index", "human_development_index", "diabetes_prevalence", "gdp_per_capita"]]
+    data = data[["date", "new_cases", "mobility_data", "people_fully_vaccinated", "stringency_index", "human_development_index", "diabetes_prevalence", "gdp_per_capita", "new_vaccinations"]]
     data = data.rename(columns={"date": "ds", "new_cases": "y"})
     data = data.dropna()
     return data
@@ -38,7 +39,6 @@ def regressor_addition(meta_prophet_model, regressors):
 
 def run_meta_prophet_model(data):
     data = clean_data_for_prophet(data)
-    print(data)
     
     # Training data is 2 years 6 months and Test data is for 6 months
     training_data = data[(data["ds"] >= pd.to_datetime("2020-01-01")) & (data["ds"] <= pd.to_datetime("2022-06-30"))]
@@ -55,6 +55,27 @@ def run_meta_prophet_model(data):
         speculation = meta_prophet_model.predict(test_data)
         plot_meta_prophet(test_data, speculation, item)
 
+def analysis_meta_prophet(data):
+    data = clean_data_for_prophet(data)
+    all_vals = []
+    
+    # Training data is 2 years 6 months and Test data is for 6 months
+    training_data = data[(data["ds"] >= pd.to_datetime("2020-01-01")) & (data["ds"] <= pd.to_datetime("2022-06-30"))]
+    test_data = data[(data["ds"] >= pd.to_datetime("2022-07-01"))]
+
+    exog_vars = ["new_vaccinations","mobility_data","stringency_index","human_development_index","diabetes_prevalence","gdp_per_capita"]
+    for item in exog_vars:
+        item_arr = [item]
+        meta_prophet_model = Prophet(weekly_seasonality = True)
+        meta_prophet_model = regressor_addition(meta_prophet_model, item_arr)
+        meta_prophet_model.fit(training_data)
+        speculation = meta_prophet_model.predict(test_data)
+        rmse = root_mean_squared_error(test_data["y"], speculation["yhat"])
+        all_vals.append([item_arr, rmse])
+    return all_vals
+
 if __name__ == "__main__":
     data = clean_data()
     run_meta_prophet_model(data)
+    all_vals = analysis_meta_prophet(data)
+    print(all_vals)
