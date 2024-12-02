@@ -102,6 +102,7 @@ def run_Seasonal_ARIMA_model(data):
     case2 = ["mobility_data", "stringency_index"]
     case3 = ["mobility_data", "stringency_index", "gdp_per_capita"]
     case4 = ["mobility_data", "gdp_per_capita", "new_vaccinations"]
+    #case5 = []
 
     for item in [case1, case2, case3, case4]:
 

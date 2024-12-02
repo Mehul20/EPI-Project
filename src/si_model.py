@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 from source import compile_data
 
 def extract_columns(data):

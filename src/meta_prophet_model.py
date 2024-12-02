@@ -48,6 +48,8 @@ def run_meta_prophet_model(data):
     case1 = [all_exog[1], all_exog[2]]
     case2 = [all_exog[2], all_exog[-1]]
     case3 = [all_exog[3], all_exog[0]]
+    #case4 = 
+    
     for item in [all_exog, case1, case2, case3]:
         meta_prophet_model = Prophet(weekly_seasonality = True)
         meta_prophet_model = regressor_addition(meta_prophet_model, item)
