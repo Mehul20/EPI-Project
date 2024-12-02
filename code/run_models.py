@@ -93,7 +93,7 @@ def export_results(f):
              to_excel=True)[['ModelNickname','TestSetRMSE','TestSetR2','InSampleRMSE','InSampleR2','best_model']]
 
 if __name__ == "__main__":
-    # run_RNN()
-    # run_LSTM()
+    run_RNN()
+    run_LSTM()
     f = plot_all()
     export_results(f)
