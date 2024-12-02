@@ -140,7 +140,7 @@ def compute_seasonal_ARIMA_all(data):
 
 if __name__ == "__main__":
     data = clean_data()
-    #run_Seasonal_ARIMA_model(data)
-    #graph_plots(data)
+    run_Seasonal_ARIMA_model(data)
+    graph_plots(data)
     all_vals = compute_seasonal_ARIMA_all(data)
-    print(all_vals)
+    #print(all_vals)
