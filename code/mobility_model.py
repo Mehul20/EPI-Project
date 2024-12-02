@@ -114,7 +114,33 @@ def run_Seasonal_ARIMA_model(data):
         speculation = fit_model.forecast(steps = len(test_data), exog = exogFor)
         plot_seasonal_ARIMA(test_data, speculation, item)
 
+def compute_seasonal_ARIMA_all(data):
+    data = set_index_on_date(data)
+
+    exog_vars = ["new_vaccinations","mobility_data","stringency_index", "human_development_index","diabetes_prevalence","gdp_per_capita"]
+    training_data_len = int(0.7 * len(data))
+
+    for curr_var in exog_vars:
+        data[curr_var] = data[curr_var].interpolate(method = "linear")
+
+    training_data = data[:training_data_len].astype(float)
+    test_data = data[training_data_len:].astype(float)
+    all_vals = []
+    for curr_var in exog_vars:
+        exogTrain = training_data[curr_var]
+        exogFor = test_data[curr_var]
+
+        seasonal_arima_model = SARIMAX(training_data["new_cases"], exog = exogTrain, order=(1, 1, 1), seasonal_order=(1, 1, 1, 52))
+        fit_model = seasonal_arima_model.fit()
+
+        speculation = fit_model.forecast(steps = len(test_data), exog = exogFor)
+        rmse = root_mean_squared_error(test_data["new_cases"], speculation)
+        all_vals.append([curr_var, rmse])
+    return all_vals
+
 if __name__ == "__main__":
     data = clean_data()
-    run_Seasonal_ARIMA_model(data)
-    graph_plots(data)
+    #run_Seasonal_ARIMA_model(data)
+    #graph_plots(data)
+    all_vals = compute_seasonal_ARIMA_all(data)
+    print(all_vals)
