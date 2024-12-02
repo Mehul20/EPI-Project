@@ -1,6 +1,7 @@
 from source import compile_data
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.metrics import root_mean_squared_error
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 def clean_data():
@@ -64,7 +65,7 @@ def set_index_on_date(data):
     data = data.asfreq('W')
     return data
 
-def plot_seasonal_ARIMA(test_data, speculation):
+def plot_seasonal_ARIMA(test_data, speculation, item):
     plt.figure(figsize=(12, 6))
     
     plt.plot(test_data.index, test_data["new_cases"], label="Ground Truth Data", color = "green")
@@ -72,27 +73,46 @@ def plot_seasonal_ARIMA(test_data, speculation):
     
     plt.plot(test_data.index, speculation, label="Seasonal ARIMA Prediction", color="red")
     plt.ylabel("New Covid - 19 Cases")
-    
+
+    sub_title = ""
+    for curr_item in item:
+        sub_title += curr_item + ", "
+    sub_title = sub_title[:len(sub_title) - 2]
+    plt.suptitle("Exogenous Variables used are: " + sub_title, fontsize = 8)
+
     plt.title("Speculation vs Ground Truth with Seasonal ARIMA Model")
     plt.legend()
     plt.grid()
-    plt.savefig("../plots/SARIMA/image.png", format = "png")
+    plt.savefig("../plots/SARIMA/image" + sub_title + ".png", format = "png")
     plt.show()
 
 def run_Seasonal_ARIMA_model(data):
     data = set_index_on_date(data)
 
     training_data_len = int(0.7 * len(data))
-    data["mobility_data"].interpolate(method="linear", inplace=True)
+    data["mobility_data"].interpolate(method = "linear", inplace = True)
+    data["stringency_index"].interpolate(method = "linear", inplace = True)
+    data["gdp_per_capita"].interpolate(method = "linear", inplace = True)
+    data["new_vaccinations"].interpolate(method = "linear", inplace = True)
 
     training_data = data[:training_data_len].astype(float)
     test_data = data[training_data_len:].astype(float)
 
-    seasonal_arima_model = SARIMAX(training_data["new_cases"], exog=training_data["mobility_data"], order=(1, 1, 1), seasonal_order=(1, 1, 1, 52))
-    fit_model = seasonal_arima_model.fit()
+    case1 = ["mobility_data"]
+    case2 = ["mobility_data", "stringency_index"]
+    case3 = ["mobility_data", "stringency_index", "gdp_per_capita"]
+    case4 = ["mobility_data", "gdp_per_capita", "new_vaccinations"]
 
-    speculation = fit_model.forecast(steps = len(test_data), exog=test_data["mobility_data"])
-    plot_seasonal_ARIMA(test_data, speculation)
+    for item in [case1, case2, case3, case4]:
+
+        exogTrain = training_data[item]
+        exogFor = test_data[item]
+
+        seasonal_arima_model = SARIMAX(training_data["new_cases"], exog = exogTrain, order=(1, 1, 1), seasonal_order=(1, 1, 1, 52))
+        fit_model = seasonal_arima_model.fit()
+
+        speculation = fit_model.forecast(steps = len(test_data), exog = exogFor)
+        plot_seasonal_ARIMA(test_data, speculation, item)
 
 if __name__ == "__main__":
     data = clean_data()
