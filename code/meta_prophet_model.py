@@ -22,9 +22,9 @@ def plot_meta_prophet(test_data, speculation, item):
     
     sub_title = ""
     for curr_item in item:
-        sub_title += curr_item + ","
-    sub_title = sub_title[:len(sub_title) - 1]
-    plt.suptitle("Exogenous Variables used are: " + sub_title, fontsize = 8)
+        sub_title += curr_item + ", "
+    sub_title = sub_title[:len(sub_title) - 2]
+    plt.suptitle("Exogenous Variables used are: " + sub_title, fontsize = 12)
 
     plt.legend()
     plt.grid()
@@ -47,7 +47,8 @@ def run_meta_prophet_model(data):
     all_exog = ["mobility_data", "people_fully_vaccinated", "stringency_index", "human_development_index", "diabetes_prevalence", "gdp_per_capita"]
     case1 = [all_exog[1], all_exog[2]]
     case2 = [all_exog[2], all_exog[-1]]
-    for item in [all_exog, case1, case2]:
+    case3 = [all_exog[3], all_exog[0]]
+    for item in [all_exog, case1, case2, case3]:
         meta_prophet_model = Prophet(weekly_seasonality = True)
         meta_prophet_model = regressor_addition(meta_prophet_model, item)
         meta_prophet_model.fit(training_data)
