@@ -15,7 +15,7 @@ pip install prophet scikit-learn statsmodels pandas matplotlib sktime scalecast
 
 - All the code files are in the path: `src/`. 
 - The raw and cleaned data is in `data/`. 
-- All the plots are in `plots`.
+- All the plots are in `plots/`.
 
 ## Data Cleaning
 
@@ -83,4 +83,3 @@ python3 run_RNN_LSTM.py
 ```
 
 This file runs the RNN and LSTM models and generates plots that are saved in `plots/RNN`. Layer Functions are in `LSTM_RNN.py`. Also generates metrics that are in `code/results.xlsx`.
-
