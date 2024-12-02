@@ -78,7 +78,7 @@ def plot_seasonal_ARIMA(test_data, speculation, item):
     for curr_item in item:
         sub_title += curr_item + ", "
     sub_title = sub_title[:len(sub_title) - 2]
-    plt.suptitle("Exogenous Variables used are: " + sub_title, fontsize = 8)
+    plt.suptitle("Exogenous Variables used are: " + sub_title, fontsize = 12)
 
     plt.title("Speculation vs Ground Truth with Seasonal ARIMA Model")
     plt.legend()
