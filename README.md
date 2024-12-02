@@ -2,7 +2,8 @@
 
 ## Contributors
 
-Mehul Rastogi & Akshat Karwa
+- Mehul Rastogi (mehulrastogi at gatech dot edu)
+- Akshat Karwa (akshatkarwa at gatech dot edu)
 
 ## Setup
 
