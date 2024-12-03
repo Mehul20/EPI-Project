@@ -83,3 +83,11 @@ python3 run_RNN_LSTM.py
 ```
 
 This file runs the RNN and LSTM models and generates plots that are saved in `plots/RNN`. Layer Functions are in `LSTM_RNN.py`. Also generates metrics that are in `src/results.xlsx`.
+
+## Documentation & Reports
+
+The following reports can be found in the `doc/` directory:
+
+- Project Proposal
+- Project Milestone
+- Final Project Report
