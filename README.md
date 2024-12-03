@@ -82,4 +82,4 @@ cd src
 python3 run_RNN_LSTM.py
 ```
 
-This file runs the RNN and LSTM models and generates plots that are saved in `plots/RNN`. Layer Functions are in `LSTM_RNN.py`. Also generates metrics that are in `code/results.xlsx`.
+This file runs the RNN and LSTM models and generates plots that are saved in `plots/RNN`. Layer Functions are in `LSTM_RNN.py`. Also generates metrics that are in `src/results.xlsx`.
