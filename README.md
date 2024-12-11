@@ -7,7 +7,7 @@
 
 ## Website
 
-More information about the project can be found on this website - [CSE 8803 Epidemiology website](https://sites.google.com/view/cse8803-epi/home).
+More information about the project can be found on this website - [Project Website](https://sites.google.com/view/cse8803-epi/home).
 
 ## Setup
 
