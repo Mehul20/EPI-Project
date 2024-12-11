@@ -5,6 +5,10 @@
 - Mehul Rastogi (mehulrastogi at gatech dot edu)
 - Akshat Karwa (akshatkarwa at gatech dot edu)
 
+## Website
+
+More information about the project can be found on this website - [CSE 8803 Epidemiology website](https://sites.google.com/view/cse8803-epi/home).
+
 ## Setup
 
 ```
